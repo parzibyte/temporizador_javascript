@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Temporizador con JavaScript - By Parzibyte</title>
+</head>
+
+<body>
+	<h2 id="tiempoRestante"></h2>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const $tiempoRestante = document.querySelector("#tiempoRestante");
+			let idInterval;
+			const iniciarTemporizador = (minutos, segundos) => {
+				const milisegundos = (segundos + (minutos * 60)) * 1000;
+				const fechaFuturo = new Date(new Date().getTime() + milisegundos);
+				idInterval = setInterval(() => {
+					const tiempoRestante = fechaFuturo.getTime() - new Date().getTime();
+					if (tiempoRestante <= 0) {
+						console.log("Tiempo terminado");
+						clearInterval(idInterval);
+					} else {
+						$tiempoRestante.textContent = milisegundosAMinutosYSegundos(tiempoRestante);
+					}
+				}, 50);
+			};
+
+			const agregarCeroSiEsNecesario = valor => {
+				if (valor < 10) {
+					return "0" + valor;
+				} else {
+					return "" + valor;
+				}
+			}
+			const milisegundosAMinutosYSegundos = (milisegundos) => {
+				const minutos = parseInt(milisegundos / 1000 / 60);
+				milisegundos -= minutos * 60 * 1000;
+				segundos = (milisegundos / 1000);
+				return `${agregarCeroSiEsNecesario(minutos)}:${agregarCeroSiEsNecesario(segundos.toFixed(1))}`;
+			};
+
+
+			iniciarTemporizador(0, 5);
+		});
+	</script>
+</body>
+
+</html>
