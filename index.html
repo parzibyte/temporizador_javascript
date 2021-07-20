@@ -10,13 +10,28 @@
 
 <body>
 	<h2 id="tiempoRestante"></h2>
+	<button id="btnIniciar">Iniciar</button>
+	<button id="btnPausar">Pausar</button>
+	<button id="btnDetener">Detener</button>
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
-			const $tiempoRestante = document.querySelector("#tiempoRestante");
-			let idInterval;
+			const $tiempoRestante = document.querySelector("#tiempoRestante"),
+				$btnIniciar = document.querySelector("#btnIniciar"),
+				$btnPausar = document.querySelector("#btnPausar"),
+				$btnDetener = document.querySelector("#btnDetener");
+			let idInterval = null, diferenciaTemporal = 0,
+				fechaFuturo = null;
 			const iniciarTemporizador = (minutos, segundos) => {
-				const milisegundos = (segundos + (minutos * 60)) * 1000;
-				const fechaFuturo = new Date(new Date().getTime() + milisegundos);
+				if (fechaFuturo) {
+					fechaFuturo = new Date(new Date().getTime() + diferenciaTemporal);
+					console.log("Reanudar con diferencia de " + diferenciaTemporal);
+					diferenciaTemporal = 0;
+				} else {
+					console.log("Iniciar");
+					const milisegundos = (segundos + (minutos * 60)) * 1000;
+					fechaFuturo = new Date(new Date().getTime() + milisegundos);
+				}
+				clearInterval(idInterval);
 				idInterval = setInterval(() => {
 					const tiempoRestante = fechaFuturo.getTime() - new Date().getTime();
 					if (tiempoRestante <= 0) {
@@ -26,6 +41,17 @@
 						$tiempoRestante.textContent = milisegundosAMinutosYSegundos(tiempoRestante);
 					}
 				}, 50);
+			};
+
+			const pausarTemporizador = () => {
+				diferenciaTemporal = fechaFuturo.getTime() - new Date().getTime();
+				clearInterval(idInterval);
+			};
+
+			const detenerTemporizador = () => {
+				clearInterval(idInterval);
+				fechaFuturo = null;
+				diferenciaTemporal = 0;
 			};
 
 			const agregarCeroSiEsNecesario = valor => {
@@ -43,7 +69,11 @@
 			};
 
 
-			iniciarTemporizador(0, 5);
+			$btnIniciar.onclick = () => {
+				iniciarTemporizador(0, 30);
+			};
+			$btnPausar.onclick = pausarTemporizador;
+			$btnDetener.onclick = detenerTemporizador;
 		});
 	</script>
 </body>
