@@ -13,12 +13,28 @@
 
 <body>
 	<section class="section">
-		<div class="columns">
+		<div class="columns is-centered">
 			<div class="column has-text-centered">
+				<div id="contenedorInputs">
+					<div class="field">
+						<label class="label">Minutos</label>
+						<div class="control">
+							<input class="input" id="minutos" type="number" placeholder="Minutos">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Segundos</label>
+						<div class="control">
+							<input class="input" id="segundos" type="number" placeholder="Segundos">
+						</div>
+					</div>
+				</div>
 				<h2 id="tiempoRestante">00:00.0</h2>
 				<button id="btnIniciar" class="button is-success"><span class="mdi mdi-play"></span></button>
 				<button id="btnPausar" class="button is-success"><span class="mdi mdi-pause"></span></button>
 				<button id="btnDetener" class="button is-success"><span class="mdi mdi-stop"></span></button>
+				<br>
+				<a href="https://parzibyte.me/blog">Creado por Parzibyte</a>
 			</div>
 		</div>
 	</section>
@@ -27,7 +43,10 @@
 			const $tiempoRestante = document.querySelector("#tiempoRestante"),
 				$btnIniciar = document.querySelector("#btnIniciar"),
 				$btnPausar = document.querySelector("#btnPausar"),
-				$btnDetener = document.querySelector("#btnDetener");
+				$btnDetener = document.querySelector("#btnDetener"),
+				$minutos = document.querySelector("#minutos"),
+				$segundos = document.querySelector("#segundos"),
+				$contenedorInputs = document.querySelector("#contenedorInputs");
 			let idInterval = null, diferenciaTemporal = 0,
 				fechaFuturo = null;
 			// Carga un sonido a través de su fuente y lo inyecta de manera oculta
@@ -53,6 +72,7 @@
 			}
 
 			const iniciarTemporizador = (minutos, segundos) => {
+				ocultarElemento($contenedorInputs);
 				mostrarElemento($btnPausar);
 				ocultarElemento($btnIniciar);
 				ocultarElemento($btnDetener);
@@ -112,6 +132,9 @@
 				return `${agregarCeroSiEsNecesario(minutos)}:${agregarCeroSiEsNecesario(segundos.toFixed(1))}`;
 			};
 			const init = () => {
+				$minutos.value = "";
+				$segundos.value = "";
+				mostrarElemento($contenedorInputs);
 				mostrarElemento($btnIniciar);
 				ocultarElemento($btnPausar);
 				ocultarElemento($btnDetener);
@@ -119,7 +142,12 @@
 
 
 			$btnIniciar.onclick = () => {
-				iniciarTemporizador(0, 3);
+				const minutos = parseInt($minutos.value);
+				const segundos = parseInt($segundos.value);
+				if (isNaN(minutos) || isNaN(segundos) || segundos <= 0) {
+					return;
+				}
+				iniciarTemporizador(minutos, segundos);
 			};
 			init();
 			$btnPausar.onclick = pausarTemporizador;
