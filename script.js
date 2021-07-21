@@ -37,10 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		ocultarElemento($btnDetener);
 		if (fechaFuturo) {
 			fechaFuturo = new Date(new Date().getTime() + diferenciaTemporal);
-			console.log("Reanudar con diferencia de " + diferenciaTemporal);
 			diferenciaTemporal = 0;
 		} else {
-			console.log("Iniciar");
 			const milisegundos = (segundos + (minutos * 60)) * 1000;
 			fechaFuturo = new Date(new Date().getTime() + milisegundos);
 		}
@@ -48,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		idInterval = setInterval(() => {
 			const tiempoRestante = fechaFuturo.getTime() - new Date().getTime();
 			if (tiempoRestante <= 0) {
-				console.log("Tiempo terminado");
 				clearInterval(idInterval);
 				sonido.play();
 				ocultarElemento($btnPausar);
