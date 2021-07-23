@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	$btnIniciar.onclick = () => {
 		const minutos = parseInt($minutos.value);
 		const segundos = parseInt($segundos.value);
-		if (isNaN(minutos) || isNaN(segundos) || segundos <= 0) {
+		if (isNaN(minutos) || isNaN(segundos) || (segundos <= 0 && minutos <= 0)) {
 			return;
 		}
 		iniciarTemporizador(minutos, segundos);
